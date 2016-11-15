@@ -48,13 +48,66 @@
 	
 	__webpack_require__(1);
 	
-	var _test = __webpack_require__(2);
+	var _express = __webpack_require__(2);
 	
-	(0, _test.blegh)();
+	var _express2 = _interopRequireDefault(_express);
 	
-	console.log("from server");
+	var _http = __webpack_require__(3);
 	
-	//  throw new Error("err");
+	var _http2 = _interopRequireDefault(_http);
+	
+	var _socket = __webpack_require__(4);
+	
+	var _socket2 = _interopRequireDefault(_socket);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var isDevelopment = process.env.NODE_ENV !== "production";
+	
+	// -------------------
+	// setup
+	var app = (0, _express2.default)();
+	var server = _http2.default.Server(app);
+	var io = (0, _socket2.default)(server);
+	
+	// -------------------
+	// Client webpack 
+	
+	// -------------------
+	// Configure Express
+	app.set("view engine", "jade");
+	app.use(_express2.default.static("public"));
+	
+	var useExternalStyles = !isDevelopment;
+	app.get("/", function (req, res) {
+		res.render("index", {
+			useExternalStyles: useExternalStyles
+		});
+	});
+	
+	// -------------------
+	// Modules
+	
+	
+	// -------------------
+	// Socket
+	io.on("connection", function (socket) {
+		console.log("got connection from " + socket.request.connection.remoteAddress);
+	});
+	
+	// -------------------
+	// Starting
+	
+	
+	var port = process.env.PORT || 3000;
+	
+	function startServer() {
+		server.listen(port, function () {
+			console.log("Started http server on " + port + " port");
+		});
+	}
+	
+	startServer();
 
 /***/ },
 /* 1 */
@@ -66,15 +119,19 @@
 /* 2 */
 /***/ function(module, exports) {
 
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.blegh = blegh;
-	function blegh() {
-	    console.log("It works");
-	}
+	module.exports = require("express");
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	module.exports = require("http");
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	module.exports = require("socket.io");
 
 /***/ }
 /******/ ]);
