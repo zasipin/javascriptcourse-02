@@ -5,5 +5,12 @@ import "./application.scss";
 
 blegh();
 
-$("body").html("asd");
+setTimeout(()=>{
+	$("body").html("asd");	
+}, 1000);
+
 console.log(_);
+
+if(module.hot){
+	module.hot.accept();
+}
